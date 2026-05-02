@@ -108,7 +108,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      height: '100dvh',
+      height: 'calc(100dvh - 70px)',
       maxWidth: '760px',
       margin: '0 auto',
       background: '#0a0a0a',

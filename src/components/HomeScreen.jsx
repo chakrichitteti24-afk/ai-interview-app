@@ -1,9 +1,10 @@
 import React from 'react';
+import Logo from './Logo';
 
 const HomeScreen = ({ onStart }) => {
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: 'calc(100vh - 70px)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -37,39 +38,13 @@ const HomeScreen = ({ onStart }) => {
         gap: '32px',
       }}>
 
-        {/* Badge */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '6px 16px',
-          borderRadius: '999px',
-          border: '1px solid rgba(0,255,136,0.3)',
-          background: 'rgba(0,255,136,0.06)',
-          color: '#00ff88',
-          fontSize: '11px',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-        }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', display: 'inline-block', boxShadow: '0 0 6px #00ff88' }} />
-          AI-Powered Mock Interviews
+        {/* Logo at Top Center */}
+        <div style={{ transform: 'scale(1.2)' }}>
+          <Logo />
         </div>
 
         {/* Hero text */}
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{
-            fontSize: 'clamp(3rem, 10vw, 5rem)',
-            fontWeight: '800',
-            margin: '0 0 12px',
-            background: 'linear-gradient(135deg, #ffffff 0%, #00ff88 60%, #00cc6a 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-          }}>
-            PrepIQ
-          </h1>
+        <div style={{ textAlign: 'center', marginTop: '8px' }}>
           <p style={{
             color: '#9ca3af',
             fontSize: 'clamp(0.9rem, 3vw, 1.05rem)',
@@ -80,6 +55,7 @@ const HomeScreen = ({ onStart }) => {
             Get real feedback. Land the job.
           </p>
         </div>
+
 
         {/* Feature pills */}
         <div style={{

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 const ResultScreen = ({ messages, onRestart }) => {
   // The final message from Smith contains the summary
@@ -8,6 +9,41 @@ const ResultScreen = ({ messages, onRestart }) => {
   // Try to extract a score from the summary text (e.g. "7/10" or "7 out of 10")
   const scoreMatch = summaryContent.match(/(\d{1,2})\s*(?:\/|out of)\s*10/i);
   const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+
+  // Extract individual scores from messages to build pie chart data
+  const chartData = useMemo(() => {
+    const categories = {
+      excellent: { name: 'Excellent (8-10)', value: 0, color: '#00ff88' },
+      good: { name: 'Good (5-7)', value: 0, color: '#3b82f6' },
+      improvement: { name: 'Needs Improvement (0-4)', value: 0, color: '#ef4444' }
+    };
+
+    // Look through all assistant messages (excluding the final summary)
+    // and try to find scores like "Score: 8/10"
+    messages.forEach(msg => {
+      if (msg.role === 'assistant' && msg !== summaryMessage) {
+        const individualScoreMatch = msg.content.match(/Score:\s*(\d{1,2})\/10/i) || 
+                                     msg.content.match(/(\d{1,2})\/10/i);
+        if (individualScoreMatch) {
+          const s = parseInt(individualScoreMatch[1]);
+          if (s >= 8) categories.excellent.value++;
+          else if (s >= 5) categories.good.value++;
+          else categories.improvement.value++;
+        }
+      }
+    });
+
+    // Fallback: if no individual scores found, use the overall score to simulate some data for visual effect
+    // or if we have at least one score, use it.
+    const hasData = Object.values(categories).some(c => c.value > 0);
+    if (!hasData && score !== null) {
+      if (score >= 8) categories.excellent.value = 1;
+      else if (score >= 5) categories.good.value = 1;
+      else categories.improvement.value = 1;
+    }
+
+    return Object.values(categories).filter(c => c.value > 0);
+  }, [messages, summaryMessage, score]);
 
   const scoreColor = score === null ? '#9ca3af'
     : score >= 8 ? '#00ff88'
@@ -20,9 +56,9 @@ const ResultScreen = ({ messages, onRestart }) => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       background: '#0a0a0a',
-      padding: '24px 16px',
+      padding: '100px 16px 40px', // Adjusted for header
       fontFamily: '"JetBrains Mono", "Fira Code", monospace',
     }}>
 
@@ -80,12 +116,45 @@ const ResultScreen = ({ messages, onRestart }) => {
             </div>
           )}
 
-          <p style={{ color: '#6b7280', fontSize: '13px', margin: 0 }}>
+          <p style={{ color: '#6b7280', fontSize: '13px', margin: '0 0 24px' }}>
             {score === null ? "Here's your performance summary from Smith" :
               score >= 8 ? '🎉 Excellent performance!' :
               score >= 5 ? '👍 Good effort, keep practicing!' :
               '💪 Keep going, you\'ll get there!'}
           </p>
+
+          {/* Pie Chart Section */}
+          {chartData.length > 0 && (
+            <div style={{ height: '240px', width: '100%', marginTop: '20px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="45%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ background: '#111', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+                    itemStyle={{ color: '#fff' }}
+                  />
+                  <Legend 
+                    verticalAlign="bottom" 
+                    align="center"
+                    iconType="circle"
+                    formatter={(value) => <span style={{ color: '#9ca3af', fontSize: '11px', fontWeight: '500' }}>{value}</span>}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
 
         {/* Summary card */}
@@ -141,6 +210,7 @@ const ResultScreen = ({ messages, onRestart }) => {
             cursor: 'pointer',
             boxShadow: '0 0 24px rgba(0,255,136,0.3)',
             transition: 'all 0.2s ease',
+            marginBottom: '40px',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'translateY(-2px)';
@@ -159,3 +229,4 @@ const ResultScreen = ({ messages, onRestart }) => {
 };
 
 export default ResultScreen;
+
