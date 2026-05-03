@@ -42,7 +42,7 @@ const SetupScreen = ({ onComplete }) => {
       padding: '24px 16px',
       fontFamily: '"JetBrains Mono", "Fira Code", monospace',
     }}>
-      <div style={card}>
+      <div className="setup-card" style={card}>
 
         {/* Header */}
         <div style={{ marginBottom: '28px' }}>
@@ -62,7 +62,7 @@ const SetupScreen = ({ onComplete }) => {
           <label style={{ color: '#9ca3af', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
             Select Role
           </label>
-          <div style={{
+          <div className="setup-role-grid" style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '10px',
@@ -104,7 +104,7 @@ const SetupScreen = ({ onComplete }) => {
           <label style={{ color: '#9ca3af', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
             Experience Level
           </label>
-          <div style={{
+          <div className="setup-level-grid" style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',
             gap: '10px',
@@ -170,6 +170,25 @@ const SetupScreen = ({ onComplete }) => {
           {ready ? 'Start Interview →' : 'Select role & experience'}
         </button>
       </div>
+      
+      <style>{`
+        @media (max-width: 768px) {
+          .setup-card {
+            padding: 20px 16px !important;
+          }
+        }
+        @media (max-width: 390px) {
+          .setup-card {
+            padding: 16px 12px !important;
+          }
+          .setup-role-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .setup-level-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

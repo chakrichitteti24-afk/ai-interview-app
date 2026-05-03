@@ -60,12 +60,12 @@ const HomeScreen = ({ onStart, session }) => {
       }}>
 
         {/* Logo at Top Center */}
-        <div style={{ transform: 'scale(1.2)' }}>
+        <div className="home-logo-wrapper" style={{ transform: 'scale(1.2)' }}>
           <Logo />
         </div>
 
         {/* Hero text */}
-        <div style={{ textAlign: 'center', marginTop: '8px' }}>
+        <div className="home-hero-text" style={{ textAlign: 'center', marginTop: '8px' }}>
           <p style={{
             color: '#9ca3af',
             fontSize: 'clamp(0.9rem, 3vw, 1.05rem)',
@@ -79,7 +79,7 @@ const HomeScreen = ({ onStart, session }) => {
 
 
         {/* Feature pills */}
-        <div style={{
+        <div className="home-feature-pills" style={{
           display: 'flex',
           flexWrap: 'wrap',
           gap: '10px',
@@ -100,6 +100,7 @@ const HomeScreen = ({ onStart, session }) => {
         {/* CTA Button */}
         <button
           id="start-interview-btn"
+          className="home-cta-btn"
           onClick={onStart}
           style={{
             width: '100%',
@@ -131,7 +132,7 @@ const HomeScreen = ({ onStart, session }) => {
 
         {/* Interview History */}
         {history.length > 0 && (
-          <div style={{
+          <div className="home-history" style={{
             width: '100%',
             maxWidth: '400px',
             marginTop: '40px',
@@ -196,29 +197,36 @@ const HomeScreen = ({ onStart, session }) => {
       </div>
       
       <style>{`
-        @media (max-width: 375px) {
-          div > div {
-            gap: 24px !important;
+        @media (max-width: 768px) {
+          .home-logo-wrapper {
+            transform: scale(0.65) !important;
           }
-          div > div > div:first-child {
-            transform: scale(0.9) !important;
+          .home-hero-text p {
+            font-size: 24px !important;
+            line-height: 1.5 !important;
           }
-          div > div > p {
-            font-size: 0.85rem !important;
-          }
-          div > div > div:nth-child(3) {
+          .home-feature-pills {
             gap: 6px !important;
           }
-          div > div > div:nth-child(3) span {
+          .home-feature-pills span {
             font-size: 10px !important;
             padding: 4px 10px !important;
           }
-          div > div > button {
-            padding: 14px 24px !important;
-            font-size: 0.9rem !important;
+          .home-cta-btn {
+            padding: 16px 24px !important;
+            font-size: 16px !important;
+            width: 100% !important;
           }
-          div > div > div:last-of-type {
+          .home-history {
             margin-top: 24px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .home-logo-wrapper {
+            transform: scale(0.6) !important;
+          }
+          .home-hero-text p {
+            font-size: 20px !important;
           }
         }
       `}</style>

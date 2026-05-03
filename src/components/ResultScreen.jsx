@@ -141,7 +141,7 @@ const ResultScreen = ({ messages, onRestart, role, level, session }) => {
         {/* Large Score Display */}
         {score !== null && (
           <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <span style={{
+            <span className="result-score" style={{
               fontSize: 'clamp(5rem, 15vw, 8rem)',
               fontWeight: '800',
               color: scoreColor,
@@ -162,7 +162,7 @@ const ResultScreen = ({ messages, onRestart, role, level, session }) => {
             justifyContent: 'center',
             marginBottom: '20px',
           }}>
-            <div style={{
+            <div className="result-grade" style={{
               width: '80px',
               height: '80px',
               borderRadius: '50%',
@@ -191,7 +191,7 @@ const ResultScreen = ({ messages, onRestart, role, level, session }) => {
 
         {/* Pie Chart */}
         {chartData.length > 0 && (
-          <div style={{ 
+          <div className="result-pie-chart" style={{ 
             height: '280px', 
             width: '100%',
             background: 'rgba(255,255,255,0.02)',
@@ -266,7 +266,7 @@ const ResultScreen = ({ messages, onRestart, role, level, session }) => {
         )}
 
         {/* Buttons */}
-        <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+        <div className="result-buttons" style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
           <button
             onClick={onRestart}
             style={{
@@ -340,29 +340,37 @@ const ResultScreen = ({ messages, onRestart, role, level, session }) => {
       </div>
       
       <style>{`
-        @media (max-width: 375px) {
-          div > div > div {
-            padding: 60px 12px 30px !important;
+        @media (max-width: 768px) {
+          .result-score {
+            font-size: 60px !important;
           }
-          div > div > div > span:first-child {
-            font-size: 4rem !important;
-          }
-          div > div > div > div {
+          .result-grade {
             width: 60px !important;
             height: 60px !important;
           }
-          div > div > div > div span:first-child {
+          .result-grade span:first-child {
             font-size: 1.8rem !important;
           }
-          div > div > div > div span:last-child {
+          .result-grade span:last-child {
             font-size: 0.5rem !important;
           }
-          div > div > div > div:last-of-type {
+          .result-pie-chart {
+            height: 250px !important;
+          }
+          .result-buttons {
             flex-direction: column !important;
             gap: 10px !important;
           }
-          div > div > div > div:last-of-type button {
+          .result-buttons button {
             width: 100% !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .result-score {
+            font-size: 48px !important;
+          }
+          .result-pie-chart {
+            height: 220px !important;
           }
         }
       `}</style>

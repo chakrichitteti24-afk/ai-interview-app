@@ -214,7 +214,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
   const progress = Math.min((questionCount / 10) * 100, 100);
 
   return (
-    <div style={{
+    <div className="interview-container" style={{
       position: 'relative',
       width: '100vw',
       height: '100vh',
@@ -226,7 +226,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
       color: '#fff',
     }}>
       {/* ── Background gradient (single theme) ─────────────────────────────── */}
-      <div style={{
+      <div className="earth-container" style={{
         position: 'absolute',
         inset: 0,
         background: 'radial-gradient(circle at 70% 30%, rgba(0, 255, 136, 0.08) 0%, transparent 50%)',
@@ -279,7 +279,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
           justifyContent: 'center',
         }}>
           {/* Question text - floats directly on background, no box */}
-          <div style={{
+          <div className="question-text" style={{
             fontSize: '20px',
             fontWeight: '500',
             lineHeight: '1.6',
@@ -300,7 +300,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
         </div>
 
         {/* Right Side: Robot Avatar (Center-right, transparent, no borders) */}
-        <div style={{
+        <div className="robot-avatar" style={{
           position: 'relative',
           width: '400px',
           display: 'flex',
@@ -370,7 +370,7 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
 
       {/* ── Footer Input (Only visible after speech complete, glowing underline) ───────────────────────────── */}
       {showInput && (
-        <footer style={{
+        <footer className="input-container" style={{
           padding: '40px 80px 60px',
           zIndex: 10,
         }}>
@@ -484,42 +484,71 @@ const InterviewChat = ({ messages, isLoading, onSendMessage, questionCount }) =>
         }
         
         /* Mobile Responsive */
-        @media (max-width: 375px) {
+        @media (max-width: 768px) {
+          /* Fix text wrapping - MOST IMPORTANT */
+          .question-text {
+            font-size: 15px !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            line-height: 1.6 !important;
+            padding: 0 16px !important;
+            text-align: left !important;
+            width: 90% !important;
+          }
+
+          /* Robot smaller */
+          .robot-avatar {
+            width: 80px !important;
+            height: 80px !important;
+          }
+
+          /* Hide earth on mobile */
+          .earth-container {
+            display: none !important;
+          }
+
+          /* Input bar full width */
+          .input-container {
+            width: 100% !important;
+            padding: 8px 12px !important;
+          }
+
+          /* Overall container */
+          .interview-container {
+            padding: 8px !important;
+            overflow-x: hidden !important;
+          }
+
           header {
             padding: 20px 16px !important;
           }
           main {
             flex-direction: column !important;
-            padding: 0 20px !important;
+            padding: 0 16px !important;
             gap: 20px !important;
           }
           main > div:first-child {
             max-width: 100% !important;
             order: 2 !important;
           }
-          main > div:first-child > div {
-            font-size: 16px !important;
-            text-align: center !important;
-          }
           main > div:last-child {
-            width: 120px !important;
-            height: 120px !important;
             order: 1 !important;
           }
           main > div:last-child > div {
-            width: 120px !important;
-            height: 120px !important;
+            width: 80px !important;
+            height: 80px !important;
           }
           main > div:last-child > div > div > div {
-            margin-top: 40px !important;
-            gap: 30px !important;
+            margin-top: 20px !important;
+            gap: 20px !important;
           }
           main > div:last-child > div > div > div > div {
-            width: 20px !important;
-            height: 20px !important;
+            width: 15px !important;
+            height: 15px !important;
           }
           footer {
-            padding: 20px 20px 40px !important;
+            padding: 20px 16px 40px !important;
           }
           form {
             width: 100% !important;
