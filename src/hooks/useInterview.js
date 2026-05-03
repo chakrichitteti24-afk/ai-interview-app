@@ -115,6 +115,7 @@ export const useInterview = () => {
             model: 'llama-3.1-8b-instant',
             messages: groqMessages,
             temperature: 0.7,
+            max_tokens: 300,
           })
         }
       );

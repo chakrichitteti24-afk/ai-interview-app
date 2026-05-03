@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from './Logo';
+import { supabase } from '../lib/supabase';
 
-const HomeScreen = ({ onStart }) => {
+const HomeScreen = ({ onStart, session }) => {
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchHistory();
+    }
+  }, [session]);
+
+  const fetchHistory = async () => {
+    const { data, error } = await supabase
+      .from('interview_sessions')
+      .select('id, role, level, score, date')
+      .eq('user_id', session.user.id)
+      .order('date', { ascending: false })
+      .limit(5);
+    
+    if (!error && data) {
+      setHistory(data);
+    }
+  };
   return (
     <div style={{
       minHeight: 'calc(100vh - 70px)',
@@ -9,9 +30,9 @@ const HomeScreen = ({ onStart }) => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#0a0a0a',
+      background: '#080d1f',
       padding: '24px 16px',
-      fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+      fontFamily: '"Outfit", sans-serif',
     }}>
 
       {/* Glow blob */}
@@ -108,11 +129,99 @@ const HomeScreen = ({ onStart }) => {
           Start Interview →
         </button>
 
+        {/* Interview History */}
+        {history.length > 0 && (
+          <div style={{
+            width: '100%',
+            maxWidth: '400px',
+            marginTop: '40px',
+          }}>
+            <h3 style={{
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: '12px',
+              fontWeight: '700',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              margin: '0 0 16px',
+              textAlign: 'center',
+            }}>
+              Recent Sessions
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {history.map((session) => (
+                <div
+                  key={session.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 16px',
+                    background: 'rgba(255,255,255,0.03)',
+                    borderRadius: '10px',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                  }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>
+                      {session.role}
+                    </span>
+                    <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>
+                      {new Date(session.date).toLocaleDateString()} · {session.level}
+                    </span>
+                  </div>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    background: session.score >= 8 ? 'rgba(0,255,136,0.2)' : session.score >= 6 ? 'rgba(0,204,255,0.2)' : 'rgba(255,77,77,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: session.score >= 8 ? '#00ff88' : session.score >= 6 ? '#00ccff' : '#ff4d4d',
+                  }}>
+                    {session.score}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
-        <p style={{ color: '#374151', fontSize: '11px', margin: 0, textAlign: 'center' }}>
-          Powered by <span style={{ color: '#4b5563' }}>Smith · Groq AI · llama-3.3-70b</span>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', margin: '40px 0 0', textAlign: 'center' }}>
+          Powered by <span style={{ color: 'rgba(255,255,255,0.5)' }}>Smith · Groq AI</span>
         </p>
       </div>
+      
+      <style>{`
+        @media (max-width: 375px) {
+          div > div {
+            gap: 24px !important;
+          }
+          div > div > div:first-child {
+            transform: scale(0.9) !important;
+          }
+          div > div > p {
+            font-size: 0.85rem !important;
+          }
+          div > div > div:nth-child(3) {
+            gap: 6px !important;
+          }
+          div > div > div:nth-child(3) span {
+            font-size: 10px !important;
+            padding: 4px 10px !important;
+          }
+          div > div > button {
+            padding: 14px 24px !important;
+            font-size: 0.9rem !important;
+          }
+          div > div > div:last-of-type {
+            margin-top: 24px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

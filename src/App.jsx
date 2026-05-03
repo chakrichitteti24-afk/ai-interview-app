@@ -11,6 +11,8 @@ import { supabase } from './lib/supabase';
 function App() {
   const [session, setSession] = useState(null);
   const [appState, setAppState] = useState('HOME'); // HOME, SETUP, CHAT, RESULT
+  const [selectedRole, setSelectedRole] = useState('');
+  const [selectedLevel, setSelectedLevel] = useState('');
   
   const { 
     messages, 
@@ -48,6 +50,8 @@ function App() {
   };
 
   const handleSetupComplete = (role, experience) => {
+    setSelectedRole(role);
+    setSelectedLevel(experience);
     startInterview(role, experience);
     setAppState('CHAT');
   };
@@ -139,7 +143,7 @@ function App() {
         )}
 
         {appState === 'HOME' && (
-          <HomeScreen onStart={handleStartSetup} />
+          <HomeScreen onStart={handleStartSetup} session={session} />
         )}
         
         {appState === 'SETUP' && (
@@ -159,6 +163,9 @@ function App() {
           <ResultScreen 
             messages={messages} 
             onRestart={handleRestart}
+            role={selectedRole}
+            level={selectedLevel}
+            session={session}
           />
         )}
       </main>
